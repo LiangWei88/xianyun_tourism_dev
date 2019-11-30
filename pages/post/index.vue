@@ -1,5 +1,5 @@
 <template>
-  <div>首页</div>
+  <div>攻略的页面</div>
 </template>
 
 <script>
