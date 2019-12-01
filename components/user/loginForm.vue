@@ -12,8 +12,7 @@
       <nuxt-link to="#">忘记密码</nuxt-link>
     </p>
 
-    <!-- <el-button class="submit" type="primary" @click="handleLoginSubmit">登录</el-button> -->
-    <el-button class="submit" type="primary">登录</el-button>
+    <el-button class="submit" type="primary" @click="handleLoginSubmit">登录</el-button>
   </el-form>
 </template>
 
@@ -42,6 +41,23 @@ export default {
         ]
       }
     };
+  },
+  methods: {
+    handleLoginSubmit() {
+      // 验证表单
+      this.$refs["form"].validate(valid => {
+        // 为true表示没有错误
+        if (valid) {
+          this.$axios({
+            url: "/accounts/login",
+            method: "POST",
+            data: this.form
+          }).then(res => {
+            console.log(res.data);
+          });
+        }
+      });
+    }
   }
 };
 </script>
