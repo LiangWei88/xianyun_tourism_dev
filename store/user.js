@@ -2,7 +2,7 @@
 // 这个是用来声明数据的
 export const state = () => ({
     userInfo: {
-        token: '123',
+        token: '',
         user: {}
     }
 })
