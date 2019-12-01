@@ -48,15 +48,17 @@ export default {
       this.$refs["form"].validate(valid => {
         // 为true表示没有错误
         if (valid) {
-          this.$axios({
-            url: "/accounts/login",
-            method: "POST",
-            data: this.form
-          }).then(res => {
-            console.log(res.data);
-            // 登陆成功,应该讲数据存到 vuex 当中
-            this.$store.commit("user/setUserInfo", res.data);
-          });
+          // this.$axios({
+          //   url: "/accounts/login",
+          //   method: "POST",
+          //   data: this.form
+          // }).then(res => {
+          //   console.log(res.data);
+          //   // 登陆成功,应该讲数据存到 vuex 当中
+          //   this.$store.commit("user/setUserInfo", res.data);
+          // });
+          // 使用 vuex 的 actions 替换这里直接写的ajax请求
+          this.$store.dispatch("user/login", this.form);
         }
       });
     }
