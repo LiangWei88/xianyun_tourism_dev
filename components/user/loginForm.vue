@@ -58,7 +58,17 @@ export default {
           //   this.$store.commit("user/setUserInfo", res.data);
           // });
           // 使用 vuex 的 actions 替换这里直接写的ajax请求
-          this.$store.dispatch("user/login", this.form);
+          this.$store.dispatch("user/login", this.form).then(res => {
+            // 成功提示
+            this.$message({
+              message: "登录成功，正在跳转",
+              type: "success"
+            });
+            // 跳转到首页
+            setTimeout(() => {
+              this.$router.replace("/");
+            }, 1000);
+          });
         }
       });
     }
