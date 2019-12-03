@@ -66,6 +66,7 @@ export default {
             });
             // 跳转到首页
             setTimeout(() => {
+              this.$store.commit("user/setUserInfo", res);
               this.$router.replace("/");
             }, 1000);
           });
