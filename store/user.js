@@ -16,6 +16,12 @@ export const mutations = {
     setUserInfo(state, data) {
         // 这里是负责修改用户数据的
         state.userInfo = data
+    },
+    cleanUserInfo(state, info) {
+        // 因为这里面的函数一定是点击了浏览器里面的按钮才会触发
+        // 所以不判断环境也无所谓
+        localStorage.removeItem("vuex");
+        state.userInfo = {};
     }
 }
 
