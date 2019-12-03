@@ -141,6 +141,11 @@ export default {
             data: props
           }).then(res => {
             console.log(res.data);
+            // 注册成功如果想要登录
+            // 最简单的方法就是js强制刷新页面
+            // 第二种办法:
+            // 1 清空本组件的 form 数据 this.form ={}
+            // 2 项父组件传递一个时间,提醒父组件切换 tab
           });
         }
       });
