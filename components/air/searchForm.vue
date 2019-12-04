@@ -18,6 +18,8 @@
           class="el-autocomplete"
           v-model="form.departCity"
           @select="selectDepartCity"
+          :trigger-on-focus="false"
+          :highlight-first-item="true"
         ></el-autocomplete>
       </el-form-item>
 
@@ -30,6 +32,8 @@
           class="el-autocomplete"
           v-model="form.destCity"
           @select="selectDestCity"
+          :trigger-on-focus="false"
+          :highlight-first-item="true"
         ></el-autocomplete>
       </el-form-item>
 
@@ -78,31 +82,20 @@ export default {
     submitSearch() {
       console.log(this.form);
     },
-    getDepartList(value, showList) {
+    async getDepartList(value, showList) {
       // 获取真正的搜索建议
-      this.$axios({
-        url: "/airs/city",
-        params: {
-          name: value
-        }
-      }).then(res => {
-        const { data } = res.data;
-        // data.forEach(element => {
-        //   element.value = element.name;
-        // });
-        const cityList = data.map(element => {
-          return {
-            ...element,
-            value: element.name
-          };
-        });
-        // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
-        showList(cityList);
-      });
+      var cityList = await this.searchCity(value);
+      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      showList(cityList);
     },
-    getDestList(value, showList) {
+    async getDestList(value, showList) {
       // 获取真正的搜索建议
-      this.$axios({
+      var cityList = await this.searchCity(value);
+      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      showList(cityList);
+    },
+    searchCity(value) {
+      return this.$axios({
         url: "/airs/city",
         params: {
           name: value
@@ -112,14 +105,28 @@ export default {
         // data.forEach(element => {
         //   element.value = element.name;
         // });
-        const cityList = data.map(element => {
+
+        const citys = data.map(element => {
           return {
             ...element,
-            value: element.name
+            // 这里我们根据 name 生成了 value
+            // 如果不需要 市 字,我们可以直接在这里替换
+            value: element.name.replace("市", "")
           };
         });
+
+        // 用过滤函数将所有不带 sort 的数据去掉
+        // const cityList = citys.filter(element=>{
+        //   // 过滤器里面,所有合法的数据应该return true
+        //   // if (element.sort) {
+        //   //   return true;
+        //   // }
+        //   return element.sort;
+        // })
+        const cityList = citys.filter(element => element.sort);
+
         // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
-        showList(cityList);
+        return cityList;
       });
     },
     selectDepartCity(item) {
