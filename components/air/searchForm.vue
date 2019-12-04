@@ -73,36 +73,48 @@ export default {
       console.log(this.form);
     },
     getDepartList(value, showList) {
-      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
-      var arr = [
-        {
-          // 数组里面每个对象都是一条建议,其中被显示出来的数据是 value
-          value: "广州"
-        },
-        {
-          value: "上海"
-        },
-        {
-          value: "深圳"
+      // 获取真正的搜索建议
+      this.$axios({
+        url: "/airs/city",
+        params: {
+          name: value
         }
-      ];
-      showList(arr);
+      }).then(res => {
+        const { data } = res.data;
+        // data.forEach(element => {
+        //   element.value = element.name;
+        // });
+        const cityList = data.map(element => {
+          return {
+            ...element,
+            value: element.name
+          };
+        });
+        // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+        showList(cityList);
+      });
     },
     getDestList(value, showList) {
-      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
-      var arr = [
-        {
-          // 数组里面每个对象都是一条建议,其中被显示出来的数据是 value
-          value: "广州"
-        },
-        {
-          value: "上海"
-        },
-        {
-          value: "深圳"
+      // 获取真正的搜索建议
+      this.$axios({
+        url: "/airs/city",
+        params: {
+          name: value
         }
-      ];
-      showList(arr);
+      }).then(res => {
+        const { data } = res.data;
+        // data.forEach(element => {
+        //   element.value = element.name;
+        // });
+        const cityList = data.map(element => {
+          return {
+            ...element,
+            value: element.name
+          };
+        });
+        // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+        showList(cityList);
+      });
     }
   }
 };
