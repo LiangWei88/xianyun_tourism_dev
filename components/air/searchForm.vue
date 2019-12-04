@@ -8,17 +8,27 @@
       </span>
     </el-row>
 
-    <el-form class="search-form-content" ref="form" label-width="80px">
+    <el-form :model="form" class="search-form-content" ref="form" label-width="80px">
       <el-form-item label="出发城市">
         <!-- fetch-suggestions 返回输入建议的方法 -->
         <!-- select 点击选中建议项时触发 -->
-        <el-input placeholder="请搜索出发城市" class="el-autocomplete" v-model="form.departCity"></el-input>
+        <el-autocomplete
+          :fetch-suggestions="getDepartList"
+          placeholder="请搜索出发城市"
+          class="el-autocomplete"
+          v-model="form.departCity"
+        ></el-autocomplete>
       </el-form-item>
 
       <el-form-item label="到达城市">
         <!-- fetch-suggestions 返回输入建议的方法 -->
         <!-- select 点击选中建议项时触发 -->
-        <el-input placeholder="请搜索到达城市" class="el-autocomplete" v-model="form.destCity"></el-input>
+        <el-autocomplete
+          :fetch-suggestions="getDestList"
+          placeholder="请搜索到达城市"
+          class="el-autocomplete"
+          v-model="form.destCity"
+        ></el-autocomplete>
       </el-form-item>
 
       <el-form-item label="出发时间">
@@ -61,6 +71,38 @@ export default {
   methods: {
     submitSearch() {
       console.log(this.form);
+    },
+    getDepartList(value, showList) {
+      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      var arr = [
+        {
+          // 数组里面每个对象都是一条建议,其中被显示出来的数据是 value
+          value: "广州"
+        },
+        {
+          value: "上海"
+        },
+        {
+          value: "深圳"
+        }
+      ];
+      showList(arr);
+    },
+    getDestList(value, showList) {
+      // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      var arr = [
+        {
+          // 数组里面每个对象都是一条建议,其中被显示出来的数据是 value
+          value: "广州"
+        },
+        {
+          value: "上海"
+        },
+        {
+          value: "深圳"
+        }
+      ];
+      showList(arr);
     }
   }
 };
