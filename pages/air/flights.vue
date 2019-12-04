@@ -11,7 +11,7 @@
 
         <!-- 航班信息 -->
         <div>
-          <FlightsItem />
+          <FlightsItem :flight="item" v-for="(item, index) in dataList" :key="index" />
         </div>
       </div>
 
