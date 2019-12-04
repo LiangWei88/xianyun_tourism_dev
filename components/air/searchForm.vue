@@ -7,6 +7,33 @@
         {{item.name}}
       </span>
     </el-row>
+
+    <el-form class="search-form-content" ref="form" label-width="80px">
+      <el-form-item label="出发城市">
+        <!-- fetch-suggestions 返回输入建议的方法 -->
+        <!-- select 点击选中建议项时触发 -->
+        <el-input placeholder="请搜索出发城市" class="el-autocomplete"></el-input>
+      </el-form-item>
+
+      <el-form-item label="到达城市">
+        <!-- fetch-suggestions 返回输入建议的方法 -->
+        <!-- select 点击选中建议项时触发 -->
+        <el-input placeholder="请搜索到达城市" class="el-autocomplete"></el-input>
+      </el-form-item>
+
+      <el-form-item label="出发时间">
+        <!-- change 用户确认选择日期时触发 -->
+        <el-date-picker type="date" placeholder="请选择日期" style="width: 100%;"></el-date-picker>
+      </el-form-item>
+
+      <el-form-item label>
+        <el-button style="width:100%;" type="primary" icon="el-icon-search">搜索</el-button>
+      </el-form-item>
+
+      <div class="reverse">
+        <span>换</span>
+      </div>
+    </el-form>
   </div>
 </template>
 
