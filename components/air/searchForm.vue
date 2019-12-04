@@ -17,6 +17,7 @@
           placeholder="请搜索出发城市"
           class="el-autocomplete"
           v-model="form.departCity"
+          @select="selectDepartCity"
         ></el-autocomplete>
       </el-form-item>
 
@@ -28,6 +29,7 @@
           placeholder="请搜索到达城市"
           class="el-autocomplete"
           v-model="form.destCity"
+          @select="selectDestCity"
         ></el-autocomplete>
       </el-form-item>
 
@@ -38,6 +40,7 @@
           placeholder="请选择日期"
           style="width: 100%;"
           v-model="form.departDate"
+          @change="changeDate"
         ></el-date-picker>
       </el-form-item>
 
@@ -53,6 +56,7 @@
 </template>
 
 <script>
+import moment from "moment";
 export default {
   data() {
     return {
@@ -63,7 +67,9 @@ export default {
       currentTab: 0,
       form: {
         departCity: "",
+        departCode: "",
         destCity: "",
+        destCode: "",
         departDate: ""
       }
     };
@@ -115,6 +121,31 @@ export default {
         // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
         showList(cityList);
       });
+    },
+    selectDepartCity(item) {
+      // 我们的搜索建议列表其实是使用数组进行渲染的,
+      // 每一个元素都是一个对象
+      // 当我们点击列表里面的其中一个选项时,
+      // 这个选项对应的 对象就会被自动传到 这个 select 时间当中
+      // 当我们点击了一个选项, 触发 select 事件以后
+      // 会有一个 被点击选项的对象传到这个函数里面
+      // 将 item.sort 放到 form.departCode
+      // 这个 item 就是一个城市
+      // console.log(item);
+
+      this.form.departCode = item.sort;
+    },
+    selectDestCity(item) {
+      // 当我们点击了一个选项, 触发 select 事件以后
+      // 会有一个 被点击选项的对象传到这个函数里面
+      // 将 item.sort 放到 form.destCode
+      this.form.destCode = item.sort;
+    },
+    changeDate() {
+      // 每当数据改变的时候我需要将当前 this.form.departDate
+      // 的数据转换换为合适的格式
+      // console.log(moment(this.form.departDate).format("YYYY-MM-DD"));
+      this.form.departDate = moment(this.form.departDate).format("YYYY-MM-DD");
     }
   }
 };
