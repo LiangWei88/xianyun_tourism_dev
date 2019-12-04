@@ -10,7 +10,9 @@
         <FlightsListHead />
 
         <!-- 航班信息 -->
-        <div></div>
+        <div>
+          <FlightsItem />
+        </div>
       </div>
 
       <!-- 侧边栏 -->
@@ -23,12 +25,14 @@
 
 <script>
 import FlightsListHead from "@/components/air/flightsListHead.vue";
+import FlightsItem from "@/components/air/flightsItem.vue";
 
 export default {
   // 其他代码...
 
   components: {
-    FlightsListHead
+    FlightsListHead,
+    FlightsItem
   }
 };
 </script>
