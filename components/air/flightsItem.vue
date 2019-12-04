@@ -33,14 +33,22 @@
       <el-row type="flex" justify="space-between" align="middle">
         <el-col :span="4">低价推荐</el-col>
         <el-col :span="20">
-          <el-row type="flex" justify="space-between" align="middle" class="flight-sell">
+          <el-row
+            v-for="(item,index) in flight.seat_infos"
+            :key="index"
+            type="flex"
+            justify="space-between"
+            align="middle"
+            class="flight-sell"
+          >
             <el-col :span="16" class="flight-sell-left">
-              <span>经济舱</span> | 上海一诺千金航空服务有限公司
+              <span>{{item.name}}</span>
+              | {{item.supplierName}}
             </el-col>
-            <el-col :span="5" class="price">￥1345</el-col>
+            <el-col :span="5" class="price">￥{{item.settle_price_coupon}}</el-col>
             <el-col :span="3" class="choose-button">
               <el-button type="warning" size="mini">选定</el-button>
-              <p>剩余：83</p>
+              <p>剩余：666</p>
             </el-col>
           </el-row>
         </el-col>
