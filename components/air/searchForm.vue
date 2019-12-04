@@ -2,7 +2,12 @@
   <div class="search-form">
     <!-- 头部tab切换 -->
     <el-row type="flex" class="search-tab">
-      <span v-for="(item, index) in tabs" :key="index" :class="{active: index === currentTab}">
+      <span
+        @click="changeTab(index)"
+        v-for="(item, index) in tabs"
+        :key="index"
+        :class="{active: index === currentTab}"
+      >
         <i :class="item.icon"></i>
         {{item.name}}
       </span>
@@ -195,6 +200,15 @@ export default {
       this.form.destCode = departCode;
       this.form.departCity = destCity;
       this.form.departCode = destCode;
+    },
+    changeTab(index) {
+      if (index == 1) {
+        this.$confirm("目前暂不支持往返，请使用单程搜索！", "提示", {
+          confirmButtonText: "哦",
+          showCancelButton: false,
+          type: "warning"
+        });
+      }
     }
   }
 };
