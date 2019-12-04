@@ -53,7 +53,7 @@
       </el-form-item>
 
       <div class="reverse">
-        <span>换</span>
+        <span @click="reverseCity">换</span>
       </div>
     </el-form>
   </div>
@@ -98,13 +98,21 @@ export default {
     async getDepartList(value, showList) {
       // 获取真正的搜索建议
       var cityList = await this.searchCity(value);
+      // 如果列表长度为零证明没有结果,提示用户不支持
+      // if (!cityList || cityList.length == 0) {
+      //   cityList = [{ value: "暂不支持该城市" }];
+      // }
       // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      // 为了避免用户直接输入后啥都不干,直接将输入框失去焦点
+      // 可以默认将城市列表第一个 sort 放入 form 当中
+      this.form.departCode = cityList[0].sort;
       showList(cityList);
     },
     async getDestList(value, showList) {
       // 获取真正的搜索建议
       var cityList = await this.searchCity(value);
       // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
+      this.form.destCode = cityList[0].sort;
       showList(cityList);
     },
     searchCity(value) {
@@ -170,6 +178,23 @@ export default {
       // 的数据转换换为合适的格式
       // console.log(moment(this.form.departDate).format("YYYY-MM-DD"));
       this.form.departDate = moment(this.form.departDate).format("YYYY-MM-DD");
+    },
+    reverseCity() {
+      // 这里面需要做的事情是将出发地和到达地互换
+      // this.form.departCity = this.form.destCity;
+      // 如果这样子的话 那么数据就会丢失
+      // 应该先创建临时变量储存
+      // var destCity = this.form.destCity
+      // var destCode = this.form.destCode
+      // var departCity = this.form.departCity
+      // var departCode = this.form.departCode
+      // 可以使用解构的形式
+      const { destCity, destCode, departCity, departCode } = this.form;
+      // 然后两两互换
+      this.form.destCity = departCity;
+      this.form.destCode = departCode;
+      this.form.departCity = destCity;
+      this.form.departCode = destCode;
     }
   }
 };
