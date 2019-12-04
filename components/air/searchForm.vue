@@ -86,6 +86,14 @@ export default {
         path: "/air/flights",
         query: this.form
       });
+      // query 的参数都会作为 url location.search 参数待在最后以问号开头,& 分隔
+      // params
+      // 1. 如果我们的路由配置, path 里面有动态路由参数, 而且你传的 params 也是相同名称的属性,那么这个参数就会显示在url上
+      // 2. 如果没有配置动态路由,参数一样可以传递,跳转之后的页面 可以通过 this.$route.params 接受,但是不会显示在 url,一旦刷新,这个传值就会丢失.
+      // {
+      //   path: '/student/:id'
+      //   component: xxxComponent
+      // }
     },
     async getDepartList(value, showList) {
       // 获取真正的搜索建议
@@ -117,6 +125,10 @@ export default {
             // 这里我们根据 name 生成了 value
             // 如果不需要 市 字,我们可以直接在这里替换
             value: element.name.replace("市", "")
+            // 广州市,可以将最后一个字给去掉
+            // 但是对于某一些城市来说最后一个字不能去掉
+            // 现在还没有发现除了最后一个字以外还有别的市字的名称
+            // 如果有必要限制只是删除在字符串最后的市字,可以使用正则进行匹配替换现在普通的搜索
           };
         });
 
