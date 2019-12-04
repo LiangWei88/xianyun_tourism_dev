@@ -81,6 +81,11 @@ export default {
   methods: {
     submitSearch() {
       console.log(this.form);
+      // 页面跳转
+      this.$router.push({
+        path: "/air/flights",
+        query: this.form
+      });
     },
     async getDepartList(value, showList) {
       // 获取真正的搜索建议
