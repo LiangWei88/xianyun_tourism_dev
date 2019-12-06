@@ -82,7 +82,22 @@ export default {
     },
 
     // 选择出发时间时候触发
-    handleFlightTimes(value) {},
+    handleFlightTimes(value) {
+      var newFlightsList = this.flightsData.flights.filter(element => {
+        // 先获取飞机起飞时间的小时数据
+        var depTimeHour = +element.dep_time.split(":")[0];
+        // console.log(depTimeHour);
+        // this.flightTimes 是一个字符串 "6,12"
+        // 先切割成一个数组
+        var before = +this.flightTimes.split(",")[0];
+        var after = +this.flightTimes.split(",")[1];
+        // 数据量少的时候可以写死一个小范围进行测试
+        // var before = 21;
+        // var after = 22;
+        return depTimeHour >= before && depTimeHour < after;
+      });
+      this.$emit("setFlightsData", newFlightsList);
+    },
 
     // 选择航空公司时候触发
     handleCompany(value) {
