@@ -14,7 +14,7 @@
               <span>{{flight.org_airport_name + flight.org_airport_quay}}</span>
             </el-col>
             <el-col :span="8" class="flight-time">
-              <span>2时20分</span>
+              <span>{{duration}}</span>
             </el-col>
             <el-col :span="8" class="flight-airport">
               <strong>{{flight.arr_time}}</strong>
@@ -59,7 +59,32 @@
 
 <script>
 export default {
-  props: ["flight"]
+  props: ["flight"],
+  computed: {
+    duration() {
+      // 我要在这里计算航班飞行时间
+      // 我们可以直接在接口获取日期和时间的字符串
+      // 格式是:2019-12-06 00:20:00
+      // 可以直接作为参数创建一个日期对象
+      // var date = new Date('2019-12-06 00:20:00')
+      // 时间戳 = date.getTime();
+      var arr_timestamp = new Date(this.flight.arr_datetime).getTime();
+      var dep_timestamp = new Date(this.flight.dep_datetime).getTime();
+
+      var duration = arr_timestamp - dep_timestamp;
+
+      // 这里处理跨过凌晨的飞行航班问题
+      if (duration < 0) {
+        // 跨过了凌晨,那么到达时间应该加上一天的毫秒数
+        var msOfDay = 24 * 60 * 60 * 1000;
+        duration = arr_timestamp + msOfDay - dep_timestamp;
+      }
+      var durationMinutes = duration / 1000 / 60;
+      var hours = Math.floor(durationMinutes / 60);
+      var minutes = durationMinutes % 60;
+      return hours + " 小时 " + minutes + " 分钟";
+    }
+  }
 };
 </script>
 
