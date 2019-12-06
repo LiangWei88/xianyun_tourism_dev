@@ -15,10 +15,14 @@
           <!-- total 是总数据量
           每页数据的长度应该是 page-size 属性-->
           <!-- 选择页数的时候触发的函数 current-change 函数可以接受到一个 val 值代表我们点击的页码 -->
+          <!-- 这里 page-sizes 是我们可以选择的条目数量选项
+          选择了一个以后,就会触发 size-change事件并且将选择的数量默认人传进去-->
           <el-pagination
-            layout="prev, pager, next"
+            layout="sizes, prev, pager, next"
             :total="flightsData.flights.length"
             :page-size="pageSize"
+            :page-sizes="[2,5,10,20]"
+            @size-change="sizeChange"
             @current-change="changePageIndex"
           ></el-pagination>
         </div>
@@ -63,6 +67,10 @@ export default {
 
       // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
       this.dataList = this.flightsData.flights.slice(start, end);
+    },
+    sizeChange(pageSize) {
+      this.pageSize = pageSize;
+      this.loadPage();
     }
   },
   mounted() {
