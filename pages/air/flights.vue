@@ -49,10 +49,22 @@ export default {
       flightsData: {
         flights: []
       }, // 航班总数据
-      dataList: [], // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
+      //dataList: [], // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
       pageIndex: 1,
       pageSize: 2
     };
+  },
+
+  computed: {
+    dataList() {
+      // 在这里其实 return 的就是刚刚我们一直在写 loadPage()
+      var start = (this.pageIndex - 1) * this.pageSize; // 0
+      var end = start + this.pageSize; // 10
+
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      return this.flightsData.flights.slice(start, end);
+    }
   },
 
   components: {
@@ -62,18 +74,9 @@ export default {
   methods: {
     changePageIndex(pageIndex) {
       this.pageIndex = pageIndex;
-      this.loadPage();
-    },
-    loadPage() {
-      var start = (this.pageIndex - 1) * this.pageSize; // 0
-      var end = start + this.pageSize; // 10
-
-      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
-      this.dataList = this.flightsData.flights.slice(start, end);
     },
     sizeChange(pageSize) {
       this.pageSize = pageSize;
-      this.loadPage();
     }
   },
   mounted() {
@@ -89,7 +92,6 @@ export default {
     }).then(res => {
       this.flightsData = res.data;
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
-      this.loadPage();
       this.loading = false;
     });
   }
