@@ -24,7 +24,9 @@
             :page-sizes="[2,5,10,20]"
             @size-change="sizeChange"
             @current-change="changePageIndex"
+            v-if="dataList.length > 0"
           ></el-pagination>
+          <div v-else-if="!loading">本页暂无数据</div>
         </div>
       </div>
 
@@ -43,6 +45,7 @@ import FlightsItem from "@/components/air/flightsItem.vue";
 export default {
   data() {
     return {
+      loading: true,
       flightsData: {
         flights: []
       }, // 航班总数据
@@ -87,6 +90,7 @@ export default {
       this.flightsData = res.data;
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
       this.loadPage();
+      this.loading = false;
     });
   }
 };
