@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :flightsData="flightsData" @setFlightsData="setFlightsData" />
+        <FlightsFilters :flightsData="cacheFlightsData" @setFlightsData="setFlightsData" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -47,6 +47,11 @@ export default {
   data() {
     return {
       loading: true,
+      cacheFlightsData: {
+        flights: [],
+        info: {},
+        options: {}
+      }, // 缓存原始航班总数据
       flightsData: {
         flights: [],
         info: {},
@@ -101,6 +106,18 @@ export default {
     }).then(res => {
       this.flightsData = res.data;
       // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
+
+      // 除了放到 flightsData 里面 还应该放到 缓存里面,这个缓存的数据,接受过一次以后,再也不会变好
+      // this.cacheFlightsData = res.data;
+
+      // var a ={
+      //   b:1
+      // }
+      // var c = a;
+      // var d = a
+      // 为了避免引用类型数据污染问题,需要进行深拷贝
+      this.cacheFlightsData = { ...this.flightsData };
+
       this.loading = false;
     });
   }
