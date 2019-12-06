@@ -152,7 +152,16 @@ export default {
     },
 
     // 撤销条件时候触发
-    handleFiltersCancel() {}
+    handleFiltersCancel() {
+      // 1. 清楚所有的筛选器
+      this.airport = ""; // 机场
+      this.flightTimes = ""; // 出发时间
+      this.company = ""; // 航空公司
+      this.airSize = ""; // 机型大小
+      // 先清空过滤器条件,然后子传父传回原始数据 比较笨不容易理解的方法
+      // 直接执行runFilter 更加简单
+      this.runFilters();
+    }
   }
 };
 </script>
