@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <div></div>
+        <FlightsFilters :flightsData="flightsData" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -41,13 +41,16 @@
 <script>
 import FlightsListHead from "@/components/air/flightsListHead.vue";
 import FlightsItem from "@/components/air/flightsItem.vue";
+import FlightsFilters from "@/components/air/flightsFilters.vue";
 
 export default {
   data() {
     return {
       loading: true,
       flightsData: {
-        flights: []
+        flights: [],
+        info: {},
+        options: {}
       }, // 航班总数据
       // dataList 可以放在计算属性里面,无需每次都调用函数进行计算
       //dataList: [], // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
@@ -69,7 +72,8 @@ export default {
 
   components: {
     FlightsListHead,
-    FlightsItem
+    FlightsItem,
+    FlightsFilters
   },
   methods: {
     changePageIndex(pageIndex) {
