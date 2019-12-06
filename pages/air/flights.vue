@@ -4,7 +4,7 @@
       <!-- 顶部过滤列表 -->
       <div class="flights-content">
         <!-- 过滤条件 -->
-        <FlightsFilters :flightsData="flightsData" />
+        <FlightsFilters :flightsData="flightsData" @setFlightsData="setFlightsData" />
 
         <!-- 航班头部布局 -->
         <FlightsListHead />
@@ -81,6 +81,11 @@ export default {
     },
     sizeChange(pageSize) {
       this.pageSize = pageSize;
+    },
+    setFlightsData(newFlightsList) {
+      console.log("修改机票筛选参数被触发");
+      // 接受到新的机票数据
+      this.flightsData.flights = newFlightsList;
     }
   },
   mounted() {

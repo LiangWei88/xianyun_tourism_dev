@@ -80,7 +80,28 @@ export default {
     handleFlightTimes(value) {},
 
     // 选择航空公司时候触发
-    handleCompany(value) {},
+    handleCompany(value) {
+      console.log(this.company);
+      // 组件的 props 寂静接受了所有的机票信息
+      // 筛选直接就可以在这里做
+      // 使用过滤器即可
+      // 其实这个 value 值已经双向绑定成功所以没必要再赋值
+      var newFlightsList = this.flightsData.flights.filter(
+        element => element.airline_name == this.company
+      );
+      //   var newFlightsList = flightsData.flights.filter(element => {
+      //     var isValide = element.airline_name == this.company;
+      //     return isValide;
+      //   });
+
+      //   这个 newFlightsList 是最新的机票数据, 应该子传父向父组件发送
+
+      //   var obj = {
+      //     ...this.flightsData
+      //   };
+      //   obj.flights = newFlightsList;
+      this.$emit("setFlightsData", newFlightsList);
+    },
 
     // 选择机型时候触发
     handleAirSize(value) {},
