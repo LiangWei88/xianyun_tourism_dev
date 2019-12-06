@@ -8,7 +8,7 @@
         {{flightsData.info.departDate}}
       </el-col>
       <el-col :span="4">
-        <el-select size="mini" v-model="airport" placeholder="起飞机场" @change="handleAirport">
+        <el-select size="mini" v-model="airport" placeholder="起飞机场" @change="runFilters">
           <el-option
             v-for="(item, index) in flightsData.options.airport"
             :key="index"
@@ -18,7 +18,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-select size="mini" v-model="flightTimes" placeholder="起飞时间" @change="handleFlightTimes">
+        <el-select size="mini" v-model="flightTimes" placeholder="起飞时间" @change="runFilters">
           <el-option
             v-for="(item, index) in flightsData.options.flightTimes"
             :key="index"
@@ -28,7 +28,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-select size="mini" v-model="company" placeholder="航空公司" @change="handleCompany">
+        <el-select size="mini" v-model="company" placeholder="航空公司" @change="runFilters">
           <el-option
             v-for="(item, index) in flightsData.options.company"
             :key="index"
@@ -38,7 +38,7 @@
         </el-select>
       </el-col>
       <el-col :span="4">
-        <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
+        <el-select size="mini" v-model="airSize" placeholder="机型" @change="runFilters">
           <el-option
             v-for="(item,index) in sizeOptions"
             :key="index"
@@ -73,17 +73,37 @@ export default {
     };
   },
   methods: {
+    runFilters() {
+      // 原始数据为this.flightsData.flights,作为最开始的源数据
+      let newFlightsList = this.flightsData.flights;
+      if (this.airport) {
+        newFlightsList = this.handleAirport(newFlightsList);
+      }
+      if (this.flightTimes) {
+        newFlightsList = this.handleFlightTimes(newFlightsList);
+      }
+      if (this.company) {
+        newFlightsList = this.handleCompany(newFlightsList);
+      }
+      if (this.airSize) {
+        newFlightsList = this.handleAirSize(newFlightsList);
+      }
+      //   将所有过滤器都放在一起做一遍, 每一次前一个过滤器过滤完的结果应该是后一个过滤器的数据输入
+      // 最后才一次执行更新数据操作
+
+      this.$emit("setFlightsData", newFlightsList);
+    },
     // 选择机场时候触发
-    handleAirport(value) {
-      var newFlightsList = this.flightsData.flights.filter(
+    handleAirport(oldFlightsList) {
+      var newFlightsList = oldFlightsList.filter(
         element => element.org_airport_name == this.airport
       );
-      this.$emit("setFlightsData", newFlightsList);
+      return newFlightsList;
     },
 
     // 选择出发时间时候触发
-    handleFlightTimes(value) {
-      var newFlightsList = this.flightsData.flights.filter(element => {
+    handleFlightTimes(oldFlightsList) {
+      var newFlightsList = oldFlightsList.filter(element => {
         // 先获取飞机起飞时间的小时数据
         var depTimeHour = +element.dep_time.split(":")[0];
         // console.log(depTimeHour);
@@ -96,17 +116,17 @@ export default {
         // var after = 22;
         return depTimeHour >= before && depTimeHour < after;
       });
-      this.$emit("setFlightsData", newFlightsList);
+      return newFlightsList;
     },
 
     // 选择航空公司时候触发
-    handleCompany(value) {
+    handleCompany(oldFlightsList) {
       console.log(this.company);
       // 组件的 props 寂静接受了所有的机票信息
       // 筛选直接就可以在这里做
       // 使用过滤器即可
       // 其实这个 value 值已经双向绑定成功所以没必要再赋值
-      var newFlightsList = this.flightsData.flights.filter(
+      var newFlightsList = oldFlightsList.filter(
         element => element.airline_name == this.company
       );
       //   var newFlightsList = flightsData.flights.filter(element => {
@@ -120,15 +140,15 @@ export default {
       //     ...this.flightsData
       //   };
       //   obj.flights = newFlightsList;
-      this.$emit("setFlightsData", newFlightsList);
+      return newFlightsList;
     },
 
     // 选择机型时候触发
-    handleAirSize(value) {
-      var newFlightsList = this.flightsData.flights.filter(
+    handleAirSize(oldFlightsList) {
+      var newFlightsList = oldFlightsList.filter(
         element => element.plane_size == this.airSize
       );
-      this.$emit("setFlightsData", newFlightsList);
+      return newFlightsList;
     },
 
     // 撤销条件时候触发
