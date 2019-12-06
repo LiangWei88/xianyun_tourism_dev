@@ -74,7 +74,12 @@ export default {
   },
   methods: {
     // 选择机场时候触发
-    handleAirport(value) {},
+    handleAirport(value) {
+      var newFlightsList = this.flightsData.flights.filter(
+        element => element.org_airport_name == this.airport
+      );
+      this.$emit("setFlightsData", newFlightsList);
+    },
 
     // 选择出发时间时候触发
     handleFlightTimes(value) {},
@@ -104,7 +109,12 @@ export default {
     },
 
     // 选择机型时候触发
-    handleAirSize(value) {},
+    handleAirSize(value) {
+      var newFlightsList = this.flightsData.flights.filter(
+        element => element.plane_size == this.airSize
+      );
+      this.$emit("setFlightsData", newFlightsList);
+    },
 
     // 撤销条件时候触发
     handleFiltersCancel() {}
