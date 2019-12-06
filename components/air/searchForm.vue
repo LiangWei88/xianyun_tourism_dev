@@ -131,15 +131,16 @@ export default {
         // data.forEach(element => {
         //   element.value = element.name;
         // });
-
         const citys = data.map(element => {
           return {
             ...element,
             // 这里我们根据 name 生成了 value
             // 如果不需要 市 字,我们可以直接在这里替换
-            value: element.name.replace("市", "")
+            // value: element.name.replace("市", "")
+            value: element.name.replace(/市$/, "")
             // 广州市,可以将最后一个字给去掉
             // 但是对于某一些城市来说最后一个字不能去掉
+            // 市广市州市
             // 现在还没有发现除了最后一个字以外还有别的市字的名称
             // 如果有必要限制只是删除在字符串最后的市字,可以使用正则进行匹配替换现在普通的搜索
           };
