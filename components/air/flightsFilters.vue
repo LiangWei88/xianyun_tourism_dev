@@ -19,7 +19,12 @@
       </el-col>
       <el-col :span="4">
         <el-select size="mini" v-model="flightTimes" placeholder="起飞时间" @change="handleFlightTimes">
-          <el-option label="00:00 - 06:00" value="1"></el-option>
+          <el-option
+            v-for="(item, index) in flightsData.options.flightTimes"
+            :key="index"
+            :label="`${item.from}:00 - ${item.to}:00`"
+            :value="`${item.from},${item.to}`"
+          ></el-option>
         </el-select>
       </el-col>
       <el-col :span="4">
@@ -34,7 +39,12 @@
       </el-col>
       <el-col :span="4">
         <el-select size="mini" v-model="airSize" placeholder="机型" @change="handleAirSize">
-          <el-option label="大" value="大"></el-option>
+          <el-option
+            v-for="(item,index) in sizeOptions"
+            :key="index"
+            :label="item.label"
+            :value="item.value"
+          ></el-option>
         </el-select>
       </el-col>
     </el-row>
@@ -53,7 +63,13 @@ export default {
       airport: "", // 机场
       flightTimes: "", // 出发时间
       company: "", // 航空公司
-      airSize: "" // 机型大小
+      airSize: "", // 机型大小
+      sizeOptions: [
+        //   每一个对象都是一个尺寸,包括了 label 跟 value
+        { label: "大", value: "L" },
+        { label: "中", value: "M" },
+        { label: "小", value: "S" }
+      ]
     };
   },
   methods: {
