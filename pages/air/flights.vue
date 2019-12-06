@@ -12,6 +12,15 @@
         <!-- 航班信息 -->
         <div>
           <FlightsItem :flight="item" v-for="(item, index) in dataList" :key="index" />
+          <!-- total 是总数据量
+          每页数据的长度应该是 page-size 属性-->
+          <!-- 选择页数的时候触发的函数 current-change 函数可以接受到一个 val 值代表我们点击的页码 -->
+          <el-pagination
+            layout="prev, pager, next"
+            :total="flightsData.flights.length"
+            :page-size="pageSize"
+            @current-change="changePageIndex"
+          ></el-pagination>
         </div>
       </div>
 
@@ -30,14 +39,31 @@ import FlightsItem from "@/components/air/flightsItem.vue";
 export default {
   data() {
     return {
-      flightsData: {}, // 航班总数据
-      dataList: [] // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      flightsData: {
+        flights: []
+      }, // 航班总数据
+      dataList: [], // 航班列表数据，用于循环flightsItem组件，单独出来是因为要分页
+      pageIndex: 1,
+      pageSize: 2
     };
   },
 
   components: {
     FlightsListHead,
     FlightsItem
+  },
+  methods: {
+    changePageIndex(pageIndex) {
+      this.pageIndex = pageIndex;
+      this.loadPage();
+    },
+    loadPage() {
+      var start = (this.pageIndex - 1) * this.pageSize; // 0
+      var end = start + this.pageSize; // 10
+
+      // 数组 slice 方法接受两个参数, 第一个是切割的开始(包括当前index), 第二个是切割的结束(不包过当前 index),
+      this.dataList = this.flightsData.flights.slice(start, end);
+    }
   },
   mounted() {
     // console.log(this.$route.query);
@@ -51,7 +77,8 @@ export default {
       params: this.$route.query
     }).then(res => {
       this.flightsData = res.data;
-      this.dataList = this.flightsData.flights;
+      // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
+      this.loadPage();
     });
   }
 };
