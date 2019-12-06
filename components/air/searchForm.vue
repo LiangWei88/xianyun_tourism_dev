@@ -85,6 +85,10 @@ export default {
   },
   methods: {
     submitSearch() {
+      // 将当前搜索的数据放入 vuex
+      // 作为历史记录保存
+      // 不能直接赋值 vuex 要使用 mutations
+      this.$store.commit("history/addHistoryItem", this.form);
       console.log(this.form);
       // 页面跳转
       this.$router.push({
@@ -110,14 +114,18 @@ export default {
       // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
       // 为了避免用户直接输入后啥都不干,直接将输入框失去焦点
       // 可以默认将城市列表第一个 sort 放入 form 当中
-      this.form.departCode = cityList[0].sort;
+      if (cityList.length > 0) {
+        this.form.departCode = cityList[0].sort;
+      }
       showList(cityList);
     },
     async getDestList(value, showList) {
       // 获取真正的搜索建议
       var cityList = await this.searchCity(value);
       // 准备建议数据,然后时候 showList 回调返回到 组件当中显示
-      this.form.destCode = cityList[0].sort;
+      if (cityList.length > 0) {
+        this.form.destCode = cityList[0].sort;
+      }
       showList(cityList);
     },
     searchCity(value) {

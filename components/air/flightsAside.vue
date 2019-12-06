@@ -20,11 +20,15 @@
 
     <div class="history">
       <h5>历史查询</h5>
-      <nuxt-link to="#">
+      <nuxt-link
+        :to="`/air/flights?departCity=${item.departCity}&departCode=${item.departCode}&destCity=${item.destCity}&destCode=${item.destCode}&departDate=${item.departDate}`"
+        v-for="(item, index) in historyList"
+        :key="index"
+      >
         <el-row type="flex" justify="space-between" align="middle" class="history-item">
           <div class="air-info">
-            <div class="to-from">广州 - 上海</div>
-            <p>2019-06-16</p>
+            <div class="to-from">{{item.departCity}} - {{item.destCity}}</div>
+            <p>{{item.departDate}}</p>
           </div>
           <span>选择</span>
         </el-row>
@@ -34,7 +38,17 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      historyList: this.$store.state.history.list
+    };
+  },
+  mounted() {
+    // 打印历史数据举行测试
+    console.log(this.historyList);
+  }
+};
 </script>
 
 <style scoped lang="less">
