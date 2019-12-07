@@ -1,6 +1,6 @@
 <template>
   <div class="aside">
-    <!-- <div class="air-info">
+    <div class="air-info">
       <el-row type="flex" justify="space-between" class="info-top">
         <div>{{data.dep_date}}</div>
         <div>{{data.org_city_name}} - {{data.dst_city_name}}</div>
@@ -16,16 +16,16 @@
         </el-col>
         <el-col :span="5" class="flight-airport">
           <strong>{{data.arr_time}}</strong>
-          <span>浦东机场T2</span>
+          <span>{{data.dst_airport_name}}{{data.dst_airport_quay}}</span>
         </el-col>
       </el-row>
-    </div>-->
+    </div>
     <el-row type="flex" justify="space-between" class="info-bar">
       <span>订单总价</span>
       <span>金额</span>
       <span>数量</span>
     </el-row>
-    <!-- <el-row type="flex" justify="space-between" class="info-bar">
+    <el-row type="flex" justify="space-between" class="info-bar">
       <span>成人机票</span>
       <span>￥{{data.seat_infos.org_settle_price}}</span>
       <span>x1</span>
@@ -37,8 +37,8 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥</span>
-    </el-row>-->
+      <span class="price">￥22222</span>
+    </el-row>
   </div>
 </template>
 
