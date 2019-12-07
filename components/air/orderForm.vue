@@ -65,7 +65,7 @@
           </el-form-item>
 
           <el-form-item label="验证码">
-            <el-input></el-input>
+            <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
@@ -87,7 +87,8 @@ export default {
       ],
       insurances: [],
       contactName: "",
-      contactPhone: ""
+      contactPhone: "",
+      captcha: ""
     };
   },
   methods: {
@@ -141,10 +142,25 @@ export default {
         contactPhone: this.contactPhone,
         invoice: false,
         seat_xid: this.data.seat_infos.seat_xid,
-        air: this.data.id
+        air: this.data.id,
+        captcha: this.captcha
       };
 
-      console.log(orderData);
+      const token = this.$store.state.user.userInfo.token;
+
+      console.log(token);
+
+      // 数据已经准备完毕, 需要发送请求;
+      this.$axios({
+        url: "/airorders",
+        method: "post",
+        data: orderData,
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }).then(res => {
+        console.log(res.data);
+      });
     }
   }
 };
