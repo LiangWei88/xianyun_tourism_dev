@@ -93,9 +93,34 @@ export default {
     };
   },
   computed: {
+    // 这里的计算属性必须起码被渲染过才会执行,可以使用 v-show 隐藏
     allPrice() {
-      var res = this.data.base_price;
-      // 这里面会见厅所有引用过的数据,每次处罚计算出一个新的加个,
+      var res = 0;
+      // 机票价格
+      res += this.data.seat_infos.org_settle_price * this.users.length;
+
+      // 保险价格
+      // 是存放在了 this.insurances
+      this.insurances.forEach(id => {
+        //[1,2,666]
+        // 这里面遍历的是选中的 保险id
+        // 我们的所有保险数据都在
+        // this.data.insurances;
+        // 要在这个寻找跟这个 id 一致的对象,获取价格加到总价当中
+        this.data.insurances.forEach(item => {
+          // 这里每一个 item 都是一个保险的数据对象
+          // 如果这个对象的 id 等于我们选中的 id
+          // 就要将这个价格加入总价当中
+          if (item.id == id) {
+            res += item.price * this.users.length;
+          }
+        });
+      });
+
+      // 机场建设和燃油附加费
+      res += this.data.airport_tax_audlet * this.users.length;
+
+      // 这里面会监听所有引用过的数据,每次触发计算出一个新的价格,
       // 往侧边栏传输, 其实是兄弟组件传递, 要使用父组件作为桥梁
       this.$emit("changePrice", res);
       return res;
