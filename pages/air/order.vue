@@ -21,7 +21,9 @@ import OrderAside from "@/components/air/orderAside";
 export default {
   data() {
     return {
-      infoData: {}
+      infoData: {
+        seat_infos: {}
+      }
     };
   },
   components: {

@@ -45,10 +45,7 @@
 <script>
 export default {
   props: {
-    data: {
-      type: Object,
-      default: {}
-    }
+    data: Object
   },
   //   三种定义 props 的格式
   //   props: ['data'],
