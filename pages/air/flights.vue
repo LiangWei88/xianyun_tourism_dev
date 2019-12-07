@@ -76,7 +76,16 @@ export default {
       return this.flightsData.flights.slice(start, end);
     }
   },
-
+  watch: {
+    $route() {
+      console.log(this.$route.query.departCity);
+      // 这里一旦触发证明用户点击了历史记录
+      // location.reload();
+      // 这种强制刷新,迫不得已的方法
+      // 只需要更新数据即可
+      this.loadPageData();
+    }
+  },
   components: {
     FlightsListHead,
     FlightsItem,
@@ -94,35 +103,37 @@ export default {
       console.log("修改机票筛选参数被触发");
       // 接受到新的机票数据
       this.flightsData.flights = newFlightsList;
+    },
+    loadPageData() {
+      this.$axios({
+        url: "/airs",
+        //参数可以通过 this.$route.query
+        // 这里面数据本来就是一个对象,所以无需自己拼接
+        params: this.$route.query
+      }).then(res => {
+        this.flightsData = res.data;
+        // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
+
+        // 除了放到 flightsData 里面 还应该放到 缓存里面,这个缓存的数据,接受过一次以后,再也不会变好
+        // this.cacheFlightsData = res.data;
+
+        // var a ={
+        //   b:1
+        // }
+        // var c = a;
+        // var d = a
+        // 为了避免引用类型数据污染问题,需要进行深拷贝
+        this.cacheFlightsData = { ...this.flightsData };
+
+        this.loading = false;
+      });
     }
   },
   mounted() {
     // console.log(this.$route.query);
     // 对于路由,两种参数分别是 params 和 query
     // 对于 axios 两种参数分别是 data 和 params
-
-    this.$axios({
-      url: "/airs",
-      //参数可以通过 this.$route.query
-      // 这里面数据本来就是一个对象,所以无需自己拼接
-      params: this.$route.query
-    }).then(res => {
-      this.flightsData = res.data;
-      // 这里是分页, 我们需要拿到数据的开始index 和结尾的 index
-
-      // 除了放到 flightsData 里面 还应该放到 缓存里面,这个缓存的数据,接受过一次以后,再也不会变好
-      // this.cacheFlightsData = res.data;
-
-      // var a ={
-      //   b:1
-      // }
-      // var c = a;
-      // var d = a
-      // 为了避免引用类型数据污染问题,需要进行深拷贝
-      this.cacheFlightsData = { ...this.flightsData };
-
-      this.loading = false;
-    });
+    this.loadPageData();
   }
 };
 </script>
