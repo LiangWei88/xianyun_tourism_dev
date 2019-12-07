@@ -7,13 +7,16 @@
       </div>
 
       <!-- 侧边栏 -->
-      <div class="aside">这里放侧边栏</div>
+      <div class="aside">
+        <OrderAside />
+      </div>
     </el-row>
   </div>
 </template>
 
 <script>
 import OrderForm from "@/components/air/orderForm";
+import OrderAside from "@/components/air/orderAside";
 
 export default {
   data() {
@@ -22,7 +25,8 @@ export default {
     };
   },
   components: {
-    OrderForm
+    OrderForm,
+    OrderAside
   },
   mounted() {
     const { query } = this.$route;
