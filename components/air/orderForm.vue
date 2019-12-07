@@ -148,6 +148,18 @@ export default {
 
       const token = this.$store.state.user.userInfo.token;
 
+      // 如果没有 token  证明用户还没有登录,直接跳转到登录页
+      if (!token) {
+        this.$message({
+          message: "请先登录",
+          type: "error"
+        });
+        this.$router.push({
+          path: "/user/login"
+        });
+        return;
+      }
+
       console.log(token);
 
       // 数据已经准备完毕, 需要发送请求;
@@ -158,9 +170,19 @@ export default {
         headers: {
           Authorization: "Bearer " + token
         }
-      }).then(res => {
-        console.log(res.data);
-      });
+      })
+        .then(res => {
+          console.log(res.data);
+        })
+        .catch(err => {
+          const { message } = err.response.data;
+          // 警告提示
+          this.$confirm(message, "提示", {
+            confirmButtonText: "确定",
+            showCancelButton: false,
+            type: "warning"
+          });
+        });
     }
   }
 };
