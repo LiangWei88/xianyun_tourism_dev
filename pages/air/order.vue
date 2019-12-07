@@ -8,7 +8,7 @@
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <OrderAside />
+        <OrderAside :data="infoData" />
       </div>
     </el-row>
   </div>
