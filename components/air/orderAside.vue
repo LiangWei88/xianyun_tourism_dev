@@ -37,16 +37,14 @@
     </el-row>
     <el-row type="flex" justify="space-between" align="middle" class="info-bar">
       <span>应付总额：</span>
-      <span class="price">￥22222</span>
+      <span class="price">￥{{allPrice}}</span>
     </el-row>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    data: Object
-  },
+  props: ["data", "allPrice"],
   //   三种定义 props 的格式
   //   props: ['data'],
   //   props: {

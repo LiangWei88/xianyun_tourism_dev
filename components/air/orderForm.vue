@@ -69,6 +69,7 @@
           </el-form-item>
         </el-form>
         <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
+        <span v-show="false">{{allPrice}}</span>
       </div>
     </div>
   </div>
@@ -90,6 +91,15 @@ export default {
       contactPhone: "",
       captcha: ""
     };
+  },
+  computed: {
+    allPrice() {
+      var res = this.data.base_price;
+      // 这里面会见厅所有引用过的数据,每次处罚计算出一个新的加个,
+      // 往侧边栏传输, 其实是兄弟组件传递, 要使用父组件作为桥梁
+      this.$emit("changePrice", res);
+      return res;
+    }
   },
   methods: {
     // 添加乘机人

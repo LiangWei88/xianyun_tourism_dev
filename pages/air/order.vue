@@ -3,12 +3,12 @@
     <el-row type="flex" justify="space-between">
       <!-- 订单表单 -->
       <div class="main">
-        <OrderForm :data="infoData" />
+        <OrderForm :data="infoData" @changePrice="setPrice" />
       </div>
 
       <!-- 侧边栏 -->
       <div class="aside">
-        <OrderAside :data="infoData" />
+        <OrderAside :data="infoData" :allPrice="allPrice" />
       </div>
     </el-row>
   </div>
@@ -23,12 +23,20 @@ export default {
     return {
       infoData: {
         seat_infos: {}
-      }
+      },
+      allPrice: 0
     };
   },
   components: {
     OrderForm,
     OrderAside
+  },
+  methods: {
+    setPrice(newPrice) {
+      console.log("价格被改变了");
+      // 将受到的 表单子组件传过来的价格存到本身的data 当中
+      this.allPrice = newPrice;
+    }
   },
   mounted() {
     const { query } = this.$route;
