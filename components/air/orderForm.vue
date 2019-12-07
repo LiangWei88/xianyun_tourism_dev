@@ -133,7 +133,7 @@ export default {
     // 添加乘机人
     handleAddUsers() {
       this.users.push({
-        name: "",
+        username: "",
         id: ""
       });
     },
