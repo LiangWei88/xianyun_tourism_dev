@@ -122,7 +122,10 @@ export default {
 
       // 这里面会监听所有引用过的数据,每次触发计算出一个新的价格,
       // 往侧边栏传输, 其实是兄弟组件传递, 要使用父组件作为桥梁
-      this.$emit("changePrice", res);
+      this.$emit("changeForm", {
+        numUsers: this.users.length,
+        allPrice: res
+      });
       return res;
     }
   },
