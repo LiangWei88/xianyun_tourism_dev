@@ -5,7 +5,7 @@
       <el-form class="member-info">
         <div class="member-info-item" v-for="(user, index) in users" :key="index">
           <el-form-item label="乘机人类型">
-            <el-input placeholder="姓名" class="input-with-select" v-model="user.name">
+            <el-input placeholder="姓名" class="input-with-select" v-model="user.username">
               <el-select slot="prepend" value="1" placeholder="请选择">
                 <el-option label="成人" value="1"></el-option>
               </el-select>
@@ -53,11 +53,11 @@
       <div class="contact">
         <el-form label-width="60px">
           <el-form-item label="姓名">
-            <el-input></el-input>
+            <el-input v-model="contactName"></el-input>
           </el-form-item>
 
           <el-form-item label="手机">
-            <el-input placeholder="请输入内容">
+            <el-input placeholder="请输入手机号" v-model="contactPhone">
               <template slot="append">
                 <el-button @click="handleSendCaptcha">发送验证码</el-button>
               </template>
@@ -81,11 +81,13 @@ export default {
     return {
       users: [
         {
-          name: "",
+          username: "",
           id: ""
         }
       ],
-      insurances: []
+      insurances: [],
+      contactName: "",
+      contactPhone: ""
     };
   },
   methods: {
@@ -103,12 +105,46 @@ export default {
     },
 
     // 发送手机验证码
-    handleSendCaptcha() {},
+    handleSendCaptcha() {
+      // 点击发送验证码会触发这个函数
+      // 我受邀获取联系人的电话
+      // 发送请求获取到验证码,弹出窗口
+      // 这个弹窗逻辑只是测试使用
+      // 电话就是 this.contactPhone
+      if (this.contactPhone == "") {
+        // 可以加上各种手机号格式验证,错误弹窗
+        return;
+      }
+
+      this.$axios({
+        url: `captchas`,
+        method: "POST",
+        data: {
+          tel: this.contactPhone
+        }
+      }).then(res => {
+        const { code } = res.data;
+        this.$confirm(`模拟手机验证码为：${code}`, "提示", {
+          confirmButtonText: "确定",
+          showCancelButton: false,
+          type: "warning"
+        });
+      });
+    },
 
     // 提交订单
     handleSubmit() {
-      console.log(this.users);
-      console.log(this.insurances);
+      const orderData = {
+        users: this.users,
+        insurances: this.insurances,
+        contactName: this.contactName,
+        contactPhone: this.contactPhone,
+        invoice: false,
+        seat_xid: this.data.seat_infos.seat_xid,
+        air: this.data.id
+      };
+
+      console.log(orderData);
     }
   }
 };
