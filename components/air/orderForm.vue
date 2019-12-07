@@ -20,7 +20,7 @@
             </el-input>
           </el-form-item>
 
-          <span class="delete-user" @click="handleDeleteUser()">-</span>
+          <span class="delete-user" @click="handleDeleteUser(index)">-</span>
         </div>
       </el-form>
 
@@ -77,31 +77,30 @@ export default {
         {
           name: "",
           id: ""
-        },
-        {
-          name: "",
-          id: ""
-        },
-        {
-          name: "",
-          id: ""
         }
       ]
     };
   },
   methods: {
     // 添加乘机人
-    handleAddUsers() {},
+    handleAddUsers() {
+      this.users.push({
+        name: "",
+        id: ""
+      });
+    },
 
     // 移除乘机人
-    handleDeleteUser() {},
+    handleDeleteUser(index) {
+      this.users.splice(index, 1);
+    },
 
     // 发送手机验证码
     handleSendCaptcha() {},
 
     // 提交订单
     handleSubmit() {
-      console.log(this.user);
+      console.log(this.users);
     }
   }
 };
