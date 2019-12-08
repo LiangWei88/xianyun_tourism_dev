@@ -17,7 +17,11 @@
         <LoginForm v-if="currentTab == 0" />
 
         <!-- 注册功能组件 -->
-        <RegisterForm v-if="currentTab == 1" />
+        <!-- 1 使用 transition 标签包裹要动画效果的 dom
+        2 声明自定义的第三方动画类名-->
+        <transition enter-active-class="animated fadeInRight">
+          <RegisterForm v-if="currentTab == 1" />
+        </transition>
       </div>
     </el-row>
   </div>
