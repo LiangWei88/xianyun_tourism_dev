@@ -68,7 +68,8 @@
             <el-input v-model="captcha"></el-input>
           </el-form-item>
         </el-form>
-        <el-button type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
+        <!-- 如果正在发送的状态微针, 需要给按钮添加一个 disabled 属性为真(不能点击), 否则为假(可以点击) -->
+        <el-button :disabled="isSending" type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
         <span v-show="false">{{allPrice}}</span>
       </div>
     </div>
@@ -80,6 +81,7 @@ export default {
   props: ["data"],
   data() {
     return {
+      isSending: false,
       users: [
         {
           username: "",
@@ -173,6 +175,13 @@ export default {
 
     // 提交订单
     handleSubmit() {
+      if (this.isSending) {
+        return;
+      }
+      // 进入发送函数, 如果发现之前已经在发送,马上 return
+      // 否则把正在发送状态改为 true, 然后发送请求
+      this.isSending = true;
+
       const orderData = {
         users: this.users,
         insurances: this.insurances,
@@ -210,6 +219,8 @@ export default {
         }
       })
         .then(res => {
+          // 数据获取完毕, 无论成功失败,都要把正在发送的状态改成 false
+          this.isSending = false;
           console.log(res.data);
           // 成功以后跳转到支付页
           // 带上 支付订单 id
@@ -223,6 +234,8 @@ export default {
           });
         })
         .catch(err => {
+          // 数据获取完毕, 无论成功失败,都要把正在发送的状态改成 false
+          this.isSending = false;
           const { message } = err.response.data;
           // 警告提示
           this.$confirm(message, "提示", {
