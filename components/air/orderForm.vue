@@ -83,7 +83,14 @@
           </el-form-item>
         </el-form>
         <!-- 如果正在发送的状态微针, 需要给按钮添加一个 disabled 属性为真(不能点击), 否则为假(可以点击) -->
-        <el-button :disabled="isSending" type="warning" class="submit" @click="handleSubmit">提交订单</el-button>
+        <el-button
+          v-if="$store.state.user.userInfo.token"
+          :disabled="isSending"
+          type="warning"
+          class="submit"
+          @click="handleSubmit"
+        >提交订单</el-button>
+        <Login v-else :disableRedirect="true" />
         <span v-show="false">{{allPrice}}</span>
       </div>
     </div>
@@ -91,8 +98,13 @@
 </template>
 
 <script>
+import Login from "@/components/user/loginForm";
+
 export default {
   props: ["data"],
+  components: {
+    Login
+  },
   data() {
     return {
       isSending: false,
