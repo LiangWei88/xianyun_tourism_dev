@@ -42,7 +42,7 @@
             <el-checkbox
               :label="item.id"
               border
-            >{{item.type}}：￥{{item.price}}/份×1 最高赔付{{item.compensation}}</el-checkbox>
+            >{{item.type}}：￥{{item.price}}/份×1 最高赔付{{item.compensation}}元</el-checkbox>
           </div>
         </el-checkbox-group>
       </div>
@@ -211,6 +211,16 @@ export default {
       })
         .then(res => {
           console.log(res.data);
+          // 成功以后跳转到支付页
+          // 带上 支付订单 id
+          const { data } = res.data;
+          // 订单 id 就是 data.id
+          this.$router.push({
+            path: "/air/pay",
+            query: {
+              id: data.id
+            }
+          });
         })
         .catch(err => {
           const { message } = err.response.data;
