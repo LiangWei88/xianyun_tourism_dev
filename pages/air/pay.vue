@@ -3,7 +3,7 @@
     <div class="main">
       <div class="pay-title">
         支付总金额
-        <span class="pay-price">￥ 1000</span>
+        <span class="pay-price">￥ {{orderData.price}}</span>
       </div>
       <div class="pay-main">
         <h4>微信支付</h4>
@@ -25,6 +25,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      orderData: {}
+    };
+  },
   mounted() {
     if (this.$store.state.user.userInfo.token) {
       this.loadData();
@@ -47,6 +52,7 @@ export default {
           }
         }).then(res => {
           console.log(res.data);
+          this.orderData = res.data;
         });
       }
     }
