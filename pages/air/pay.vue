@@ -73,12 +73,79 @@ export default {
         } else {
           // 一直到状态的不再是 等待支付,
           // 要么成功要么失败, 不管是什么我都把后台传回来的状态文字 打印出来 this.$message
-          this.$message(res.data.statusTxt);
+          // 这里是简单判断成功与否
+          // this.$message(res.data.statusTxt);
           // 如果有支付成功页的话,这里可以继续接跳转
           // 如果是 setInterval
           // 请记得支付完毕清理定时器
+
+          // 如果你要详细的判断状态
+          // 使用多个 if 结构
+          // if (res.data.trade_state == "SUCCESS") {
+          //   this.$message({
+          //     message: "支付成功",
+          //     type: "success"
+          //   });
+          // }
+          this.payFinish(res.data.trade_state);
+
+          // 各种支付状态:
+          // SUCCESS—支付成功
+
+          // REFUND—转入退款
+
+          // NOTPAY—未支付
+
+          // CLOSED—已关闭
+
+          // REVOKED—已撤销（付款码支付）
+
+          // USERPAYING--用户支付中（付款码支付）
+
+          // PAYERROR--支付失败(其他原因，如银行返回失败)
         }
       });
+    },
+    payFinish(tradeState) {
+      switch (tradeState) {
+        case "SUCCESS":
+          this.$message({
+            message: "支付成功",
+            type: "success"
+          });
+          break;
+
+        case "REFUND":
+          this.$message({
+            message: "转入退款",
+            type: "info"
+          });
+          break;
+
+        case "CLOSED":
+          this.$message({
+            message: "已关闭",
+            type: "info"
+          });
+          break;
+
+        case "REVOKED":
+          this.$message({
+            message: "已撤销",
+            type: "info"
+          });
+          break;
+
+        case "PAYERROR":
+          this.$message({
+            message: "支付失败(其他原因，如银行返回失败)",
+            type: "error"
+          });
+          break;
+
+        default:
+          break;
+      }
     },
     loadData() {
       const token = this.$store.state.user.userInfo.token;
