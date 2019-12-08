@@ -10,7 +10,7 @@
         <el-row type="flex" justify="space-between" align="middle" class="pay-qrcode">
           <div class="qrcode">
             <!-- 二维码 -->
-            <canvas id="qrcode-stage"></canvas>
+            <canvas id="qrcode-stage" ref="qrCanvas"></canvas>
             <p>请使用微信扫一扫</p>
             <p>扫描二维码支付</p>
           </div>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Qrcode from "qrcode";
 export default {
   data() {
     return {
@@ -31,6 +32,10 @@ export default {
     };
   },
   mounted() {
+    console.log("打印 qrcode 库对象");
+
+    console.log(Qrcode);
+
     if (this.$store.state.user.userInfo.token) {
       this.loadData();
     }
@@ -53,6 +58,20 @@ export default {
         }).then(res => {
           console.log(res.data);
           this.orderData = res.data;
+
+          // 这里是读取数据完毕的回调,之前已经赋值到 this.orderData 里面了
+          // 要生成 二维码, 有两个 东西需要准备 1.dom 2.支付链接
+          // dom 就是 this.$refs.qrCanvas
+          // 链接就是 this.orderData.payInfo.code_url
+          // Qrcode 插件 使用 toCanvas 方法可以直接生成 canvas 图像
+          // 用到三个参数, canvas dom, text(链接), options(选项,现在只用到宽度设置)
+          Qrcode.toCanvas(
+            this.$refs.qrCanvas,
+            this.orderData.payInfo.code_url,
+            {
+              width: 200
+            }
+          );
         });
       }
     }
