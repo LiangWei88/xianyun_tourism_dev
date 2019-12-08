@@ -46,6 +46,34 @@ export default {
     }
   },
   methods: {
+    checkPayStatus() {
+      const token = this.$store.state.user.userInfo.token;
+      this.$axios({
+        url: "/airorders/checkpay",
+        method: "post",
+        data: {
+          id: this.$route.query.id,
+          nonce_str: this.orderData.price,
+          out_trade_no: this.orderData.orderNo
+        },
+        headers: {
+          Authorization: "Bearer " + token
+        }
+      }).then(res => {
+        console.log(res.data);
+        if (res.data.trade_state == "NOTPAY") {
+          // 等待支付,不断轮询
+          setTimeout(() => {
+            this.checkPayStatus();
+          }, 3000);
+        } else {
+          // 一直到状态的不再是 等待支付,
+          // 要么成功要么失败, 不管是什么我都把后台传回来的状态文字 打印出来 this.$message
+          this.$message(res.data.statusTxt);
+          // 如果有支付成功页的话,这里可以继续接跳转
+        }
+      });
+    },
     loadData() {
       const token = this.$store.state.user.userInfo.token;
       if (token) {
@@ -72,6 +100,7 @@ export default {
               width: 200
             }
           );
+          this.checkPayStatus();
         });
       }
     }
