@@ -2,7 +2,7 @@
   <div class="main">
     <div class="air-column">
       <h2>乘机人</h2>
-      <el-form class="member-info" :model="{users}">
+      <el-form class="member-info" :model="{users}" ref="formUsers">
         <div class="member-info-item" v-for="(user, index) in users" :key="index">
           <el-form-item
             label="乘机人类型"
@@ -64,6 +64,7 @@
           label-width="80px"
           :model="{contactName, contactPhone, captcha}"
           :rules="contactRules"
+          ref="formContact"
         >
           <el-form-item label="姓名" prop="contactName">
             <el-input v-model="contactName"></el-input>
@@ -204,7 +205,32 @@ export default {
     },
 
     // 提交订单
-    handleSubmit() {
+    async handleSubmit() {
+      // 先进行一次全面的表单校验
+      // 回调地狱写法
+      // this.$refs.formUsers.validate(v=>{
+      //   if (v) {
+      //     // 这里做后续的处理
+      //     this.$refs.formContact.validate(v=>{
+      //       // 才是真正的提交
+      //     })
+      //   }
+      // })
+
+      // el-form 表单的 validate 方法如果没有传入参数,则返回 promise 可以使用 async / await 方式调用
+      // async / await 接收到的只是 .then 也就是成功的回调, 但是错误应该使用 .catch 捕捉
+      const validUsers = await this.$refs.formUsers
+        .validate()
+        .catch(() => false);
+      const validContact = await this.$refs.formContact
+        .validate()
+        .catch(() => false);
+
+      if (!validUsers || !validContact) {
+        // 如果其中一个除了问题,都应该直接 return 不应该继续提交
+        return;
+      }
+
       if (this.isSending) {
         return;
       }
