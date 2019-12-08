@@ -40,6 +40,10 @@ export default {
       this.loadData();
     }
   },
+  destroyed() {
+    // 这里是组件被销毁的声明周期钩子函数
+    // 如果你用了 setInterval 记得在这里清理定时器
+  },
   watch: {
     "$store.state.user.userInfo.token"() {
       this.loadData();
@@ -71,6 +75,8 @@ export default {
           // 要么成功要么失败, 不管是什么我都把后台传回来的状态文字 打印出来 this.$message
           this.$message(res.data.statusTxt);
           // 如果有支付成功页的话,这里可以继续接跳转
+          // 如果是 setInterval
+          // 请记得支付完毕清理定时器
         }
       });
     },
