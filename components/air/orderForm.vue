@@ -283,6 +283,7 @@ export default {
         method: "post",
         data: orderData,
         headers: {
+          // 认真 token 的格式应该是: Bearer xxxxxxxxx
           Authorization: "Bearer " + token
         }
       })
