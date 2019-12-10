@@ -28,7 +28,8 @@ import Qrcode from "qrcode";
 export default {
   data() {
     return {
-      orderData: {}
+      orderData: {},
+      timer: null
     };
   },
   mounted() {
@@ -42,7 +43,9 @@ export default {
   },
   destroyed() {
     // 这里是组件被销毁的声明周期钩子函数
-    // 如果你用了 setInterval 记得在这里清理定时器
+    // 记得在这里清理定时器
+    console.log("支付页面被跳出,应该清理定时器,不再监控支付状态");
+    clearTimeout(this.timer);
   },
   watch: {
     "$store.state.user.userInfo.token"() {
@@ -67,7 +70,7 @@ export default {
         console.log(res.data);
         if (res.data.trade_state == "NOTPAY") {
           // 等待支付,不断轮询
-          setTimeout(() => {
+          this.timer = setTimeout(() => {
             this.checkPayStatus();
           }, 3000);
         } else {
