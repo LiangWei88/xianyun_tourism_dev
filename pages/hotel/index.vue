@@ -2,6 +2,7 @@
   <div style="padding:20px;">
     <h2>高德地图实例</h2>
     <div id="map"></div>
+    <div id="panel"></div>
   </div>
 </template>
 
@@ -28,10 +29,36 @@ export default {
       map.add(marker); //添加到地图
 
       // 插件添加*************************
-      AMap.plugin("AMap.ToolBar", function() {
-        //异步加载插件
+      // AMap.plugin("AMap.ToolBar", function() {
+      AMap.plugin(["AMap.ToolBar", "AMap.Driving"], function() {
+        // 插件不仅仅添加一个,将所有需要的插件都要添加进来
+        //异步加载插件后,回调里面才可以使用这些插件
+        //缩放工具栏插件
         var toolbar = new AMap.ToolBar();
         map.addControl(toolbar);
+
+        //驾车路线插件
+        // 这里是官方文档当中的简要例子
+        // var driving = new AMap.Driving(); //驾车路线规划
+        // driving.search(/*参数*/);
+
+        // 创建插件实例
+        var driving = new AMap.Driving({
+          // 驾车路线规划策略，AMap.DrivingPolicy.LEAST_TIME是最快捷模式
+          policy: AMap.DrivingPolicy.LEAST_TIME,
+          map,
+          panel: "panel"
+        });
+
+        var points = [
+          { keyword: "吉山幼儿园", city: "广州" },
+          { keyword: "体育西路", city: "广州" }
+        ];
+
+        driving.search(points, function(status, result) {
+          // 未出错时，result即是对应的路线规划方案
+          console.log(result);
+        });
       });
     };
     var url =
